@@ -4,22 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test node_modules/mocha/bin/mocha",
+    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "nodemon": "nodemon index.js",
-    "mocha": "mocha"
+    "nodemon": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "chai": "^4.3.4",
     "express": "^4.17.1",
-    "fs": "^0.0.1-security",
-    "mocha": "^9.1.3",
-    "path": "^0.12.7"
-  },
-  "devDependencies": {
-    "supertest": "^6.1.6"
+    "fs": "^0.0.1-security"
   }
 }
