@@ -2,10 +2,12 @@ const fs = require('fs');
 const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 8000;
-const layouts = require('express-ejs-layouts');
+//const layouts = require('express-ejs-layouts');
+//app.use(layouts);
+
 
 app.set('view engine', 'ejs'); // for our view (html like pages), we want to use 
-app.use(layouts);
+
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(__dirname + '/public'));
@@ -60,11 +62,17 @@ app.get('/templates/cards', (req, res) => {
     res.sendFile(__dirname + '/views/templates/cards.html');
 });
 
+app.get('/templates/cards', (req, res) => {
+    res.sendFile(__dirname + '/views/templates/cards.html');
+});
+
+
+
 // reports
 app.get('/reports', (req, res) => {
     let reportArray = [];
     let junkArray = [];
-    fs.readFile('incident_report.csv', 'utf8', (err, data) => {
+    fs.readFile('bb-song-data.csv', 'utf8', (err, data) => {
         if (err) {
             console.log("There was a problem reading the file.");
         } else {
@@ -116,7 +124,7 @@ app.get('/reports', (req, res) => {
                 // // 'Date,Injury Location,Gender,Age Group,Incident Type,Days Lost,Plant,Report Type,Shift,Department,Incident Cost,WkDay,Month,Year',
 
                 // **** [solution]: Date
-                let date = rowSplitArray[0];
+                let data = rowSplitArray[0];
                 // dateArray.push(date); // put each date inside array => next: return res.json() with the dateArray
             }
             // [here] => where I would return res.render with the dateArray now the loop is finished
@@ -124,13 +132,7 @@ app.get('/reports', (req, res) => {
             // res.json({ reports: reportArray });
         }
     });
-    // const reportOne = {
-    //     date: new Date(),
-    //     name: "Jim",
-    //     employeeNumber: 775412,
-    //     incident: "Fell off the building",
-    //     status: "Pending"
-    // }
+
 
 });
 
