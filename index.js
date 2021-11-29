@@ -6,7 +6,7 @@ const PORT = process.env.PORT || 8000;
 //app.use(layouts);
 
 
-app.set('view engine', 'ejs'); // for our view (html like pages), we want to use 
+app.set('view engine', 'ejs'); // VIEW ENGINE EJS IN ORDER TO USE HTML TEMPLATES
 
 
 app.use(express.urlencoded({ extended: false }));
@@ -14,7 +14,7 @@ app.use(express.static(__dirname + '/public'));
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/views/index.html');
-    // res.json({ message: "Welcome to our API" });
+
 });
 
 app.get('/dates', (req, res) => {
@@ -66,12 +66,9 @@ app.get('/templates/cards', (req, res) => {
     res.sendFile(__dirname + '/views/templates/cards.html');
 });
 
-
-
-// reports
-app.get('/reports', (req, res) => {
-    let reportArray = [];
-    let junkArray = [];
+// bb song data
+app.get('/bb', (req, res) => {
+    let bbArray = [];
     fs.readFile('bb-song-data.csv', 'utf8', (err, data) => {
         if (err) {
             console.log("There was a problem reading the file.");
@@ -83,57 +80,29 @@ app.get('/reports', (req, res) => {
                 let row = splitWithSpaceArray[i];
                 const rowSplitArray = row.split(',');
 
-                if (rowSplitArray.length === 15) {
+                if (rowSplitArray.length === 4) {
                     const obj = {
-                        date: rowSplitArray[0],
-                        injuryLocation: rowSplitArray[1],
-                        gender: rowSplitArray[2],
-                        ageGroup: rowSplitArray[3],
-                        incidentType: rowSplitArray[4],
-                        daysLost: rowSplitArray[5],
-                        plant: rowSplitArray[6],
-                        reportType: rowSplitArray[7],
-                        shift: rowSplitArray[8],
-                        department: rowSplitArray[9],
-                        incidentCost: rowSplitArray[10].split('$')[1] + rowSplitArray[11].split(' ')[0],
-                        weekday: rowSplitArray[12],
-                        month: rowSplitArray[13],
-                        year: rowSplitArray[14],
+                        artist: rowSplitArray[0],
+                        song: rowSplitArray[1],
+                        genre: rowSplitArray[2],
+                        year: rowSplitArray[3],
                     }
-                    junkArray.push({ row: rowSplitArray, report: obj });
-                    reportArray.push(obj);
+                    bbArray.push(obj);
                 } else {
                     const obj = {
-                        date: rowSplitArray[0],
-                        injuryLocation: rowSplitArray[1],
-                        gender: rowSplitArray[2],
-                        ageGroup: rowSplitArray[3],
-                        incidentType: rowSplitArray[4],
-                        daysLost: rowSplitArray[5],
-                        plant: rowSplitArray[6],
-                        reportType: rowSplitArray[7],
-                        shift: rowSplitArray[8],
-                        department: rowSplitArray[9],
-                        incidentCost: rowSplitArray[10],
-                        weekday: rowSplitArray[11],
-                        month: rowSplitArray[12],
-                        year: rowSplitArray[13],
+                        artist: rowSplitArray[0],
+                        song: rowSplitArray[1],
+                        genre: rowSplitArray[2],
+                        year: rowSplitArray[3],
                     }
-                    reportArray.push(obj);
+                    let song = bbArray;
+                    bbArray.push(obj);
                 }
-                // // 'Date,Injury Location,Gender,Age Group,Incident Type,Days Lost,Plant,Report Type,Shift,Department,Incident Cost,WkDay,Month,Year',
-
-                // **** [solution]: Date
-                let data = rowSplitArray[0];
-                // dateArray.push(date); // put each date inside array => next: return res.json() with the dateArray
             }
-            // [here] => where I would return res.render with the dateArray now the loop is finished
-            res.render('reports', { reports: reportArray });
-            // res.json({ reports: reportArray });
         }
+        // [here] => where I would return res.render with the dateArray now the loop is finished
+        res.render('song', { bbArray });
     });
-
-
 });
 
 // Departments  x
